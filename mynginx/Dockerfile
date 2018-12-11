@@ -7,8 +7,9 @@ RUN echo 'http://mirrors.ustc.edu.cn/alpine/v3.8/main/' >>/etc/apk/repositories
 
 
 RUN apk add nginx
+RUN mkdir /run/nginx/
 
 COPY ./src/index.html /var/www/index.html
 
 
-CMD ["npm", "start"]
+CMD ["/usr/sbin/nginx", "-g", "daemon off;"]
