@@ -6,3 +6,13 @@ stages:
 do-build:
   stage: build
   script:
+    - sudo docker build -t ysx/mynginx:$CI_COMMIT_REF_NAME
+
+do-test:
+  stage: test
+  scripts:
+    - echo 'testing code'
+do-deploy:
+  stage: deploy
+  scripts:
+    - echo 'deploy it'
