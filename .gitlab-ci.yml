@@ -4,7 +4,7 @@ stages:
   - deploy_test
   - deploy_prod
 
-do-build:
+build-docker:
   stage: build
   script:
     - echo 'try build the image'
