@@ -10,9 +10,9 @@ do-build:
 
 do-test:
   stage: test
-  scripts:
+  script:
     - echo 'testing code'
 do-deploy:
   stage: deploy
-  scripts:
+  script:
     - echo 'deploy it'
