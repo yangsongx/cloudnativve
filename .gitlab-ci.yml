@@ -4,6 +4,11 @@ stages:
   - deploy_test
   - deploy_prod
 
+# variables definitions
+variables:
+  TEST_REGISTRY: "hub.ops.qspeaker.com/qbrain_test/"
+  PROD_REGISTRY: "hub.ops.qspeaker.com/qbrain_prod/"
+
 build-docker:
   stage: build
   script:
@@ -17,7 +22,7 @@ do-test:
 
 # deploy under test should auto-start
 # after mreged to master
-do-deploy:
+deploy-to-testenv:
   stage: deploy_test
   only:
     - master
