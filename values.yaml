@@ -5,8 +5,8 @@
 replicaCount: 2
 
 image:
-  repository: nginx
-  tag: stable
+  repository: hub.ops.qspeaker.com/qbrain_test/mynginx
+  tag: D13
   pullPolicy: IfNotPresent
 
 nameOverride: ""
