@@ -6,7 +6,8 @@ stages:
 do-build:
   stage: build
   script:
-    - docker build -t ysx/mynginx:$CI_COMMIT_REF_NAME
+    - echo 'try $CI_COMMIT_REF_NAME and $CI'
+    - sudo docker build -t ysx/mynginx:$CI_COMMIT_REF_NAME .
 
 do-test:
   stage: test
