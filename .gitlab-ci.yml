@@ -1,19 +1,34 @@
 stages:
   - build
   - test
-  - deploy
+  - deploy_test
+  - deploy_prod
 
 do-build:
   stage: build
   script:
-    - echo 'try $CI_COMMIT_REF_NAME and $CI'
-    - sudo docker build -t ysx/mynginx:$CI_COMMIT_REF_NAME .
+    - echo 'try build the image'
+    - sudo docker build -t ysx/$CI_PROJECT_NAME:D$CI_PIPELINE_ID .
 
 do-test:
   stage: test
   script:
     - echo 'testing code'
+
+# deploy under test should auto-start
+# after mreged to master
 do-deploy:
-  stage: deploy
+  stage: deploy_test
+  only:
+    - master
   script:
     - echo 'deploy it'
+
+# deploy to product MUST be done manually!
+do-prod:
+  stage: deploy_prod
+  only:
+    - master
+  when: manual
+  script:
+    - echo 'deploy it under prod env'
