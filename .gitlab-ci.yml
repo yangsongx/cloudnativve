@@ -45,6 +45,8 @@ do-prod:
   stage: deploy_prod
   only:
     - master
+  tags:
+    - prod-only
   when: manual
   script:
     - echo 'deploy it under prod env'
