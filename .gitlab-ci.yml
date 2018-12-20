@@ -13,7 +13,8 @@ build-docker:
   stage: build
   script:
     - echo 'try build the image'
-    - sudo docker build -t ysx/$CI_PROJECT_NAME:D$CI_PIPELINE_ID .
+    - sudo docker build -t $TEST_REGISTRY/$CI_PROJECT_NAME:D$CI_PIPELINE_ID .
+    - sudo docker push $TEST_REGISTRY/$CI_PROJECT_NAME:D$CI_PIPELINE_ID
 
 do-test:
   stage: test
