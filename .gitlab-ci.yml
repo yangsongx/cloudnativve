@@ -41,7 +41,8 @@ deploy-to-testenv:
     - sudo helm upgrade -i --namespace ysx --set replicaCount=2,image.repository=$TEST_REGISTRY/$CI_PROJECT_NAME,image.tag=D$CI_PIPELINE_ID $CI_PROJECT_NAME $CHART_REPO/$CI_PROJECT_NAME
 
 # deploy to product MUST be done manually!
-do-prod:
+# the deploy executer run in prod-env, with `prod-only' tag!
+deploy-to-prodenv:
   stage: deploy_prod
   only:
     - master
@@ -50,7 +51,8 @@ do-prod:
   when: manual
   script:
     - echo 'deploy it under prod env'
-#    - sudo docker tag $TEST_REGISTRY/$CI_PROJECT_NAME:D$CI_PIPELINE_ID $PROD_REGISTRY/$CI_PROJECT_NAME:D$CI_PIPELINE_ID
-#    - sudo docker push $PROD_REGISTRY/$CI_PROJECT_NAME:D$CI_PIPELINE_ID
-#    - echo 'pushed [OK].'
-#    - helm upgrade -i --namespace ysx --set replicaCount=2,image.repository=$PROD_REGISTRY/$CI_PROJECT_NAME,image.tag=D$CI_PIPELINE_ID $CI_PROJECT_NAME $CHART_REPO/$CI_PROJECT_NAME
+    - sudo docker pull $TEST_REGISTRY/$CI_PROJECT_NAME:D$CI_PIPELINE_ID
+    - sudo docker tag $TEST_REGISTRY/$CI_PROJECT_NAME:D$CI_PIPELINE_ID $PROD_REGISTRY/$CI_PROJECT_NAME:D$CI_PIPELINE_ID
+    - sudo docker push $PROD_REGISTRY/$CI_PROJECT_NAME:D$CI_PIPELINE_ID
+    - echo 'pushed to prod harbor [OK].'
+    - helm upgrade -i --namespace ysx --set replicaCount=2,image.repository=$PROD_REGISTRY/$CI_PROJECT_NAME,image.tag=D$CI_PIPELINE_ID $CI_PROJECT_NAME $CHART_REPO/$CI_PROJECT_NAME
