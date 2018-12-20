@@ -8,3 +8,14 @@
     auto-connect = false
     dockerfile = "Dockerfile"
     chart = ""
+  [environments.staging]
+    name = "mynginx"
+    namespace = "default"
+    registry = "hub.ops.qspeaker.com/aws_qbrain_dev/"
+    custom-tags = ["dev-101"]
+    wait = true
+    watch = false
+    watch-delay = 2
+    auto-connect = false
+    dockerfile = "Dockerfile"
+    chart = ""

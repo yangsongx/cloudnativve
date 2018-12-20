@@ -3,13 +3,13 @@
 # Declare variables to be passed into your templates.
 replicaCount: 1
 image:
-  repository: hub.ops.qspeaker.com/qbrain_test/mynginx
-  tag: dev-101
+  repository: hub.ops.qspeaker.com/qbrain_test/teser
+  tag: c5d279e696ab81f27a16f5bf267f084eb90821cd
   pullPolicy: IfNotPresent
 service:
   name: node
   type: ClusterIP
-  externalPort: 8080
+  externalPort: 8081
   internalPort: 8080
 resources:
   limits:
