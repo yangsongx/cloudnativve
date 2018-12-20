@@ -6,8 +6,8 @@ stages:
 
 # variables definitions
 variables:
-  TEST_REGISTRY: "hub.ops.qspeaker.com/qbrain_test/"
-  PROD_REGISTRY: "hub.ops.qspeaker.com/qbrain_prod/"
+  TEST_REGISTRY: "hub.ops.qspeaker.com/qbrain_test"
+  PROD_REGISTRY: "hub.ops.qspeaker.com/qbrain_prod"
 
 build-docker:
   stage: build
