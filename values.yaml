@@ -12,6 +12,8 @@ image:
 nameOverride: ""
 fullnameOverride: ""
 
+basedomain: "foo.com"
+
 service:
   type: ClusterIP
   externalPort: 8080
