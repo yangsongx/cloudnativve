@@ -1,3 +1,5 @@
+# FIXME - in future phase, the runner MUST be in docker group
+# so we should not use `sudo docker ....' in below operations...
 stages:
   - build
   - test
@@ -6,6 +8,9 @@ stages:
 
 # variables definitions
 variables:
+  MAJOR_VERSION: "1"
+  MINOR_VERSION: "1"
+  CHART_REPO: "staging"
   TEST_REGISTRY: "hub.ops.qspeaker.com/qbrain_test"
   PROD_REGISTRY: "hub.ops.qspeaker.com/qbrain_prod"
 
@@ -14,7 +19,6 @@ build-docker:
   script:
     - echo 'try build the image'
     - sudo docker build -t $TEST_REGISTRY/$CI_PROJECT_NAME:D$CI_PIPELINE_ID .
-    - sudo docker push $TEST_REGISTRY/$CI_PROJECT_NAME:D$CI_PIPELINE_ID
 
 do-test:
   stage: test
@@ -28,7 +32,13 @@ deploy-to-testenv:
   only:
     - master
   script:
-    - echo 'deploy it'
+    - echo 'try push the docker images...'
+    - sudo docker push $TEST_REGISTRY/$CI_PROJECT_NAME:D$CI_PIPELINE_ID
+    - echo 'pushed [OK].'
+    - helm package --app-version $CI_PIPELINE_ID --version $MAJOR_VERSION.$MINOR_VERSION.$CI_PIPELINE_ID .
+    - echo 'Now, try uploading to helm chart repo...'
+    - helm s3 push ./$CI_PROJECT_NAME-$MAJOR_VERSION.$MINOR_VERSION.$CI_PIPELINE_ID.tgz $CHART_REPO
+    - helm upgrade -i --namespace ysx --set replicaCount=2,image.repository=$TEST_REGISTRY/$CI_PROJECT_NAME,image.tag=D$CI_PIPELINE_ID $CI_PROJECT_NAME $CHART_REPO/$CI_PROJECT_NAME
 
 # deploy to product MUST be done manually!
 do-prod:
@@ -38,3 +48,7 @@ do-prod:
   when: manual
   script:
     - echo 'deploy it under prod env'
+#    - sudo docker tag $TEST_REGISTRY/$CI_PROJECT_NAME:D$CI_PIPELINE_ID $PROD_REGISTRY/$CI_PROJECT_NAME:D$CI_PIPELINE_ID
+#    - sudo docker push $PROD_REGISTRY/$CI_PROJECT_NAME:D$CI_PIPELINE_ID
+#    - echo 'pushed [OK].'
+#    - helm upgrade -i --namespace ysx --set replicaCount=2,image.repository=$PROD_REGISTRY/$CI_PROJECT_NAME,image.tag=D$CI_PIPELINE_ID $CI_PROJECT_NAME $CHART_REPO/$CI_PROJECT_NAME
