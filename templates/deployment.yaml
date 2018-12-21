@@ -36,6 +36,8 @@ spec:
               path: /
               port: http
           resources:
+      imagePullSecrets:
+        - name: qbrain-registry-secret
 {{ toYaml .Values.resources | indent 12 }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
