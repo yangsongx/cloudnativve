@@ -8,6 +8,7 @@ stages:
 
 # variables definitions
 variables:
+  NAMESPACE: "emr-test"
   MAJOR_VERSION: "1"
   MINOR_VERSION: "1"
   CHART_REPO: "staging"
@@ -38,7 +39,7 @@ deploy-to-testenv:
     - helm package --app-version $CI_PIPELINE_ID --version $MAJOR_VERSION.$MINOR_VERSION.$CI_PIPELINE_ID .
     - echo 'Now, try uploading to helm chart repo...'
     - helm s3 push ./$CI_PROJECT_NAME-$MAJOR_VERSION.$MINOR_VERSION.$CI_PIPELINE_ID.tgz $CHART_REPO
-    - sudo helm upgrade -i --namespace ysx --set replicaCount=2,image.repository=$TEST_REGISTRY/$CI_PROJECT_NAME,image.tag=D$CI_PIPELINE_ID $CI_PROJECT_NAME $CHART_REPO/$CI_PROJECT_NAME
+    - sudo helm upgrade -i --namespace $NAMESPACE --set replicaCount=2,image.repository=$TEST_REGISTRY/$CI_PROJECT_NAME,image.tag=D$CI_PIPELINE_ID $CI_PROJECT_NAME $CHART_REPO/$CI_PROJECT_NAME
 
 # deploy to product MUST be done manually!
 # the deploy executer run in prod-env, with `prod-only' tag!
@@ -55,4 +56,4 @@ deploy-to-prodenv:
     - sudo docker tag $TEST_REGISTRY/$CI_PROJECT_NAME:D$CI_PIPELINE_ID $PROD_REGISTRY/$CI_PROJECT_NAME:D$CI_PIPELINE_ID
     - sudo docker push $PROD_REGISTRY/$CI_PROJECT_NAME:D$CI_PIPELINE_ID
     - echo 'pushed to prod harbor [OK].'
-    - helm upgrade -i --namespace ysx --set replicaCount=2,image.repository=$PROD_REGISTRY/$CI_PROJECT_NAME,image.tag=D$CI_PIPELINE_ID $CI_PROJECT_NAME $CHART_REPO/$CI_PROJECT_NAME
+    - helm upgrade -i --namespace $NAMESPACE --set replicaCount=2,image.repository=$PROD_REGISTRY/$CI_PROJECT_NAME,image.tag=D$CI_PIPELINE_ID $CI_PROJECT_NAME $CHART_REPO/$CI_PROJECT_NAME
