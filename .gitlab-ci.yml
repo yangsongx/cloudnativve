@@ -9,7 +9,7 @@ stages:
 # variables definitions
 variables:
   NAMESPACE: "emr-test"
-  MAJOR_VERSION: "1"
+  MAJOR_VERSION: "4"
   MINOR_VERSION: "1"
   CHART_REPO: "staging"
   TEST_REGISTRY: "hub.ops.qspeaker.com/qbrain_test"
